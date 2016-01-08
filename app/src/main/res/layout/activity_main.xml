@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <RadioGroup
+        android:id="@+id/rg_tab"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_bg">
+
+        <RadioButton
+            android:id="@+id/viewradio"
+            style="@style/ucsdbbs_tab"
+            android:drawableTop="@layout/view_selector"
+            android:text="浏览讨论区" />
+
+        <RadioButton
+            android:id="@+id/pmradio"
+            style="@style/ucsdbbs_tab"
+            android:drawableTop="@layout/pm_selector"
+            android:text="私信" />
+
+        <RadioButton
+            android:id="@+id/personalradio"
+            style="@style/ucsdbbs_tab"
+            android:drawableTop="@layout/personal_selector"
+            android:text="个人中心" />
+
+        <RadioButton
+            android:id="@+id/settingradio"
+            style="@style/ucsdbbs_tab"
+            android:drawableTop="@layout/setting_selector"
+            android:text="设置" />
+    </RadioGroup>
+</LinearLayout>

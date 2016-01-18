@@ -101,9 +101,12 @@ public abstract class BaseFragment extends Fragment {
                                 long id) {
            // Toast.makeText(getActivity().getBaseContext(),  (String)mCustomBaseAdapter.getItem(position),
          //           Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), ForumActivity.class);
-            startActivity(intent);
+            if(position==1) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), ForumActivity.class);
+                startActivity(intent);
+            }
+            
            // finish();//停止当前的Activity,如果不写,则按返回键会跳转回原来的Activity
         }
 

@@ -87,7 +87,7 @@ public class ForumActivity extends AppCompatActivity {
                         else if(json_data.getString("type").equals("sub")==false){
                             int k=0;
                             for(k=0;k<pool_ix.size();k++){if(Integer.parseInt(json_data.getString("fup"))==pool_ix.get(k))break;}
-                            pool.get(k).addItem(json_data.getString("fid"), json_data.getString("type"), json_data.getString("name"), json_data.getString("status"), json_data.getString("displayorder"), json_data.getString("threads"), json_data.getString("posts"), json_data.getString("todayposts"));
+                            pool.get(k).addItem(json_data.getString("fid"), json_data.getString("type"), json_data.getString("name"), json_data.getString("status"), json_data.getString("displayorder"), json_data.getString("threads"), json_data.getString("posts"), json_data.getString("todayposts"), json_data.getString("lastpost"));
                         }
 
                     }

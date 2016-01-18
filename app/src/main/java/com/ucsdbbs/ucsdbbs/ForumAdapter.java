@@ -41,24 +41,86 @@ public class ForumAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        // �쳣�������
         if (null == mListData || position <  0|| position > getCount()) {
             return null;
         }
 
-        // ͬһ�����ڣ���һ��Ԫ�ص�����ֵ
         int categroyFirstIndex = 0;
 
         for (ForumCategory category : mListData) {
             int size = category.getItemCount();
-            // �ڵ�ǰ�����е�����ֵ
-            int categoryIndex = position - categroyFirstIndex;
-            // item�ڵ�ǰ������
-            if (categoryIndex < size) {
-                return  category.getItem( categoryIndex );
-            }
 
-            // �����ƶ�����ǰ�����β������һ�������һ��Ԫ������
+            int categoryIndex = position - categroyFirstIndex;
+
+            if (categoryIndex < size) {
+                return  category.getItem(categoryIndex);
+            }
+            categroyFirstIndex += size;
+        }
+
+        return null;
+    }
+
+    public Object getStat(int position) {
+
+        if (null == mListData || position <  0|| position > getCount()) {
+            return null;
+        }
+
+        int categroyFirstIndex = 0;
+
+        for (ForumCategory category : mListData) {
+            int size = category.getItemCount();
+
+            int categoryIndex = position - categroyFirstIndex;
+
+            if (categoryIndex < size) {
+                return  category.getStat(categoryIndex);
+            }
+            categroyFirstIndex += size;
+        }
+
+        return null;
+    }
+
+    public Object getLastpost(int position) {
+
+        if (null == mListData || position <  0|| position > getCount()) {
+            return null;
+        }
+
+        int categroyFirstIndex = 0;
+
+        for (ForumCategory category : mListData) {
+            int size = category.getItemCount();
+
+            int categoryIndex = position - categroyFirstIndex;
+
+            if (categoryIndex < size) {
+                return  category.getLastpost(categoryIndex);
+            }
+            categroyFirstIndex += size;
+        }
+
+        return null;
+    }
+
+    public Object getLastusertime(int position) {
+
+        if (null == mListData || position <  0|| position > getCount()) {
+            return null;
+        }
+
+        int categroyFirstIndex = 0;
+
+        for (ForumCategory category : mListData) {
+            int size = category.getItemCount();
+
+            int categoryIndex = position - categroyFirstIndex;
+
+            if (categoryIndex < size) {
+                return  category.getLastusertime(categoryIndex);
+            }
             categroyFirstIndex += size;
         }
 
@@ -121,16 +183,20 @@ public class ForumAdapter extends BaseAdapter {
                     convertView = mInflater.inflate(R.layout.forum_item, null);
 
                     viewHolder = new ViewHolder();
-                    viewHolder.content = (TextView) convertView.findViewById(R.id.content);
-                    viewHolder.contentIcon = (ImageView) convertView.findViewById(R.id.content_icon);
+                    viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+                    viewHolder.stat = (TextView) convertView.findViewById(R.id.stat);
+                    viewHolder.lastpost=(TextView) convertView.findViewById(R.id.lastpost);
+                    viewHolder.lastusertime=(TextView)convertView.findViewById(R.id.lastusertime);
                     convertView.setTag(viewHolder);
                 } else {
                     viewHolder = (ViewHolder) convertView.getTag();
                 }
 
                 // ������
-                viewHolder.content.setText( (String)getItem(position) );
-                viewHolder.contentIcon.setImageResource(R.drawable.view);
+                viewHolder.name.setText( (String)getItem(position) );
+                viewHolder.stat.setText((String) getStat(position));
+                viewHolder.lastpost.setText((String) getLastpost(position));
+                viewHolder.lastusertime.setText((String)getLastusertime(position));
                 break;
         }
 
@@ -150,8 +216,10 @@ public class ForumAdapter extends BaseAdapter {
 
 
     private class ViewHolder {
-        TextView content;
-        ImageView contentIcon;
+        TextView name;
+        TextView stat;
+        TextView lastpost;
+        TextView lastusertime;
     }
 
 }

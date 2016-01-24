@@ -44,7 +44,7 @@
         android:layout_height="50dp"
         >
         <TextView
-            android:gravity="center_vertical"
+            android:gravity="right"
             android:layout_gravity="center_vertical"
             android:textSize="10dp"
             android:layout_width="120dp"

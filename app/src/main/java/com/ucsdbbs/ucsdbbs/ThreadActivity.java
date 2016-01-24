@@ -20,16 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ForumActivity extends AppCompatActivity {
-    private ForumAdapter mCustomBaseAdapter;
+public class ThreadActivity extends AppCompatActivity {
+    private ThreadAdapter mCustomBaseAdapter;
     private ServerRunnable runnable;
     // 数据
-    private ArrayList<ForumCategory> listData= new ArrayList<ForumCategory>();
+    private ArrayList<ThreadCategory> listData= new ArrayList<ThreadCategory>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum);
+        setContentView(R.layout.activity_thread);
 
         getData();
 
@@ -41,12 +41,9 @@ public class ForumActivity extends AppCompatActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-            Intent intent = new Intent();
-            intent.setClass(ForumActivity.this, ThreadActivity.class);
-            intent.putExtra("fid",(String)mCustomBaseAdapter.getFid(position));
-            startActivity(intent);
-          //  Toast.makeText(getBaseContext(), (String) mCustomBaseAdapter.getFid(position),
-          //          Toast.LENGTH_SHORT).show();
+
+            //  Toast.makeText(getBaseContext(), (String) mCustomBaseAdapter.getFid(position),
+            //          Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -65,7 +62,12 @@ public class ForumActivity extends AppCompatActivity {
         listData.add(categoryThree);*/
 
         Map<String, String> map = new HashMap<String, String>();
-        runnable = new ServerRunnable("http://www.ucsdbbs.com/app_related/getforumstruct.php", map, fill_handler);
+        Intent intent =getIntent();
+        String fid=intent.getStringExtra("fid");
+        map.put("fid",fid);
+        map.put("page","1");
+        map.put("step","15");
+        runnable = new ServerRunnable("http://www.ucsdbbs.com/app_related/getthread.php", map, fill_handler);
         new Thread(runnable).start();
     }
 
@@ -73,8 +75,7 @@ public class ForumActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            List<ForumCategory> pool =new ArrayList<ForumCategory>();
-            List<Integer>pool_ix=new ArrayList<Integer>();
+            ThreadCategory pool =new ThreadCategory("");
             Bundle data = msg.getData();
             String val = data.getString("result");
             if (val.equals("success") && !data.getString("data").equals("null")) {
@@ -84,24 +85,12 @@ public class ForumActivity extends AppCompatActivity {
                     int count=0;
                     for(int i=0;i<jArray.length();i++){
                         JSONObject json_data = jArray.getJSONObject(i);
-                        if(json_data.getString("type").equals("group")){
-                            pool.add( new ForumCategory(json_data.getString("name")));
-                            pool_ix.add(Integer.parseInt(json_data.getString("fid")));
-                            count++;
-                        }
-                        else if(json_data.getString("type").equals("sub")==false){
-                            int k=0;
-                            for(k=0;k<pool_ix.size();k++){if(Integer.parseInt(json_data.getString("fup"))==pool_ix.get(k))break;}
-                            pool.get(k).addItem(json_data.getString("fid"), json_data.getString("type"), json_data.getString("name"), json_data.getString("status"), json_data.getString("displayorder"), json_data.getString("threads"), json_data.getString("posts"), json_data.getString("todayposts"), json_data.getString("lastpost"));
-                        }
-
+                        pool.addItem(json_data.getString("tid"), json_data.getString("fid"), json_data.getString("author"), json_data.getString("authorid"), json_data.getString("subject"), json_data.getString("dateline"), json_data.getString("lastpost"), json_data.getString("views"), json_data.getString("replies"));
                     }
-                    for(int i=0;i<count;i++){
-                        listData.add(pool.get(i));
-                    }
-                    ListView listView = (ListView) findViewById(R.id.forumlist);
+                    listData.add(pool);
+                    ListView listView = (ListView) findViewById(R.id.threadlist);
                     listView.setFooterDividersEnabled(false);
-                    mCustomBaseAdapter = new ForumAdapter(getBaseContext(), listData);
+                    mCustomBaseAdapter = new ThreadAdapter(getBaseContext(), listData);
 
                     // 适配器与ListView绑定
                     listView.setAdapter(mCustomBaseAdapter);

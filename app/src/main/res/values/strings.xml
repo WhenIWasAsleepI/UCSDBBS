@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">UCSDBBS</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_thread">ThreadActivity</string>
 </resources>

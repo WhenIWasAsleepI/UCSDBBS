@@ -10,16 +10,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ForumAdapter extends BaseAdapter {
+public class ThreadAdapter extends BaseAdapter {
 
     private static final int TYPE_CATEGORY_ITEM = 0;
     private static final int TYPE_ITEM = 1;
 
-    private ArrayList<ForumCategory> mListData;
+    private ArrayList<ThreadCategory> mListData;
     private LayoutInflater mInflater;
 
 
-    public ForumAdapter(Context context, ArrayList<ForumCategory> pData) {
+    public ThreadAdapter(Context context, ArrayList<ThreadCategory> pData) {
         mListData = pData;
         mInflater = LayoutInflater.from(context);
     }
@@ -30,7 +30,7 @@ public class ForumAdapter extends BaseAdapter {
 
         if (null != mListData) {
             //  ���з�����item���ܺ���ListVIew  Item���ܸ���
-            for (ForumCategory category : mListData) {
+            for (ThreadCategory category : mListData) {
                 count += category.getItemCount();
             }
         }
@@ -47,7 +47,7 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
 
             int categoryIndex = position - categroyFirstIndex;
@@ -61,7 +61,7 @@ public class ForumAdapter extends BaseAdapter {
         return null;
     }
 
-    public Object getStat(int position) {
+    public Object getSubject(int position) {
 
         if (null == mListData || position <  0|| position > getCount()) {
             return null;
@@ -69,13 +69,13 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
 
             int categoryIndex = position - categroyFirstIndex;
 
             if (categoryIndex < size) {
-                return  category.getStat(categoryIndex);
+                return  category.getsubject(categoryIndex);
             }
             categroyFirstIndex += size;
         }
@@ -83,7 +83,7 @@ public class ForumAdapter extends BaseAdapter {
         return null;
     }
 
-    public Object getLastpost(int position) {
+    public Object getAuthor(int position) {
 
         if (null == mListData || position <  0|| position > getCount()) {
             return null;
@@ -91,13 +91,13 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
 
             int categoryIndex = position - categroyFirstIndex;
 
             if (categoryIndex < size) {
-                return  category.getLastpost(categoryIndex);
+                return  category.getauthor(categoryIndex);
             }
             categroyFirstIndex += size;
         }
@@ -105,7 +105,7 @@ public class ForumAdapter extends BaseAdapter {
         return null;
     }
 
-    public Object getLastusertime(int position) {
+    public Object getTime(int position) {
 
         if (null == mListData || position <  0|| position > getCount()) {
             return null;
@@ -113,13 +113,13 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
 
             int categoryIndex = position - categroyFirstIndex;
 
             if (categoryIndex < size) {
-                return  category.getLastusertime(categoryIndex);
+                return  category.getdate(categoryIndex);
             }
             categroyFirstIndex += size;
         }
@@ -128,7 +128,7 @@ public class ForumAdapter extends BaseAdapter {
     }
 
 
-    public Object getFid(int position) {
+    public Object getViewandReply(int position) {
 
         if (null == mListData || position <  0|| position > getCount()) {
             return null;
@@ -136,13 +136,13 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
 
             int categoryIndex = position - categroyFirstIndex;
 
             if (categoryIndex < size) {
-                return  category.getFid(categoryIndex);
+                return  category.getviewandreply(categoryIndex);
             }
             categroyFirstIndex += size;
         }
@@ -161,7 +161,7 @@ public class ForumAdapter extends BaseAdapter {
 
         int categroyFirstIndex = 0;
 
-        for (ForumCategory category : mListData) {
+        for (ThreadCategory category : mListData) {
             int size = category.getItemCount();
             // �ڵ�ǰ�����е�����ֵ
             int categoryIndex = position - categroyFirstIndex;
@@ -192,7 +192,7 @@ public class ForumAdapter extends BaseAdapter {
         switch (itemViewType) {
             case TYPE_CATEGORY_ITEM:
                 if (null == convertView) {
-                    convertView = mInflater.inflate(R.layout.forum_item_header, null);
+                    convertView = mInflater.inflate(R.layout.thread_item_header, null);
                 }
 
                 //TextView textView = (TextView) convertView.findViewById(R.id.header);
@@ -204,23 +204,23 @@ public class ForumAdapter extends BaseAdapter {
                 ViewHolder viewHolder = null;
                 if (null == convertView) {
 
-                    convertView = mInflater.inflate(R.layout.forum_item, null);
+                    convertView = mInflater.inflate(R.layout.thread_item, null);
 
                     viewHolder = new ViewHolder();
-                    viewHolder.name = (TextView) convertView.findViewById(R.id.name);
-                    viewHolder.stat = (TextView) convertView.findViewById(R.id.stat);
-                    viewHolder.lastpost=(TextView) convertView.findViewById(R.id.lastpost);
-                    viewHolder.lastusertime=(TextView)convertView.findViewById(R.id.lastusertime);
+                    viewHolder.subject = (TextView) convertView.findViewById(R.id.subject);
+                    viewHolder.author = (TextView) convertView.findViewById(R.id.author);
+                    viewHolder.time=(TextView) convertView.findViewById(R.id.threadtime);
+                    viewHolder.viewandreply=(TextView)convertView.findViewById(R.id.viewNreply);
                     convertView.setTag(viewHolder);
                 } else {
                     viewHolder = (ViewHolder) convertView.getTag();
                 }
 
                 // ������
-                viewHolder.name.setText( (String)getItem(position) );
-                viewHolder.stat.setText((String) getStat(position));
-                viewHolder.lastpost.setText((String) getLastpost(position));
-                viewHolder.lastusertime.setText((String)getLastusertime(position));
+                viewHolder.subject.setText( (String)getSubject(position) );
+                viewHolder.author.setText((String) getAuthor(position));
+                viewHolder.time.setText((String) getTime(position));
+                viewHolder.viewandreply.setText((String) getViewandReply(position));
                 break;
         }
 
@@ -240,10 +240,10 @@ public class ForumAdapter extends BaseAdapter {
 
 
     private class ViewHolder {
-        TextView name;
-        TextView stat;
-        TextView lastpost;
-        TextView lastusertime;
+        TextView subject;
+        TextView author;
+        TextView time;
+        TextView viewandreply;
     }
 
 }

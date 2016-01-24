@@ -85,7 +85,7 @@ public class ForumCategory {
             String time=aa[2];
             String user=aa[3];
             s=user;
-            s+="回复于 ";
+            s+="回复于\n";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(Long.parseLong(time)*1000);
@@ -94,6 +94,16 @@ public class ForumCategory {
             return s;
         }
         else return s;
+    }
+
+    public String getFid(int pPosition) {
+        //    String a="";
+        if (pPosition == 0) {
+            return mCategoryName;
+        } else {
+            return fid.get(pPosition-1);
+        }
+        //    return a;
     }
     /**
      *

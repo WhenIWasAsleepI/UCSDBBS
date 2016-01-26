@@ -35,6 +35,7 @@ public class ServerRunnable implements Runnable{
     }
 
     public void run() {
+        Log.e("log_tag", "BEGINS!!");
         URL url;
         HttpURLConnection httpConn = null;
         InputStream is;
@@ -63,6 +64,7 @@ public class ServerRunnable implements Runnable{
             Log.e("log_tag", "Error in http connection " + e.toString());
         }
 
+        Log.e("log_tag", "MIDWAY!!");
         try {
             // 开始GET数据
             String encoding = httpConn.getContentEncoding();
@@ -85,6 +87,7 @@ public class ServerRunnable implements Runnable{
             Bundle data1 = new Bundle();
             data1.putString("result", "success");
             data1.putString("data", content);
+            Log.e("log_tag", "BACK VALUE " + data1.getString("data"));
             msg.setData(data1);
             handler.sendMessage(msg);
         } catch (Exception e) {

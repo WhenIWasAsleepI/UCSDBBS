@@ -2,6 +2,7 @@ package com.ucsdbbs.ucsdbbs;
 
 import android.app.Application;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,14 +10,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -59,6 +64,10 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if(picked==R.layout.view) {
+            TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+            TOPIC.setText("浏览讨论区");
+            ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
+            NewThread.setVisibility(View.VISIBLE);
             ListView listView = (ListView) getActivity().findViewById(R.id.viewlist);
             listView.setFooterDividersEnabled(false);
             // 数据
@@ -71,9 +80,34 @@ public abstract class BaseFragment extends Fragment {
 
             listView.setOnItemClickListener(new ItemClickListener());
         }
+
+        if(picked==R.layout.pm) {
+            TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+            TOPIC.setText("私信");
+            ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
+            NewThread.setVisibility(View.VISIBLE);
+        }
+
+        if(picked==R.layout.personal) {
+            TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+            TOPIC.setText("个人中心");
+            ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
+            NewThread.setVisibility(View.VISIBLE);
+        }
+
+        if(picked==R.layout.setting) {
+            TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+            TOPIC.setText("设置");
+            ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
+            NewThread.setVisibility(View.VISIBLE);
+        }
+
         //-----------login xml is selected------------------------------
         if (picked == R.layout.notlogin) {
-
+            TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+            TOPIC.setText("请登录");
+            ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
+            NewThread.setVisibility(View.INVISIBLE);
             loginbutton = (Button) getActivity().findViewById(R.id.loginbutton);
             username = (EditText) getActivity().findViewById(R.id.username);
             password = (EditText) getActivity().findViewById(R.id.password);
@@ -90,6 +124,7 @@ public abstract class BaseFragment extends Fragment {
               /*  */}
                 }
             });
+
         }
     }
 
@@ -104,6 +139,7 @@ public abstract class BaseFragment extends Fragment {
             if(position==1) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), ForumActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
 
@@ -176,17 +212,36 @@ public abstract class BaseFragment extends Fragment {
                     Application application = (Application)Global.getContext();
                     global = (Global)application;
                     global.setloginstatus(true);
+                    MD5 password_md5=null;
+                    String temp="";
+                    try {
+                        temp = password_md5.getMD5(password.getText().toString());
+                        temp=temp+salt;
+                        temp=password_md5.getMD5(temp);
+                    }catch(Exception e) {
+                        Log.e("log_tag", "MD5 Error: " + e.toString());
+                    }
+                    global.setpassword(temp);
+                    global.setusername(username.getText().toString());
                     FragmentManager fragmentManager= getActivity().getSupportFragmentManager();
                     FragmentTransaction beginTransaction = fragmentManager.beginTransaction();
                     int checked=((RadioGroup)getActivity().findViewById(R.id.rg_tab)).getCheckedRadioButtonId();
+                    TextView TOPIC=(TextView)getActivity().findViewById(R.id.TOPIC);
+                    ImageButton NewThread=(ImageButton)getActivity().findViewById(R.id.NewThread);
                     switch (checked){
                         case R.id.pmradio:
+                            TOPIC.setText("私信");
+                            NewThread.setVisibility(View.VISIBLE);
                             beginTransaction.replace(R.id.content,new PmFragment());
                             break;
                         case R.id.personalradio:
+                            TOPIC.setText("个人中心");
+                            NewThread.setVisibility(View.VISIBLE);
                             beginTransaction.replace(R.id.content,new PersonalFragment());
                             break;
                         case R.id.settingradio:
+                            TOPIC.setText("设置");
+                            NewThread.setVisibility(View.VISIBLE);
                             beginTransaction.replace(R.id.content,new SettingFragment());
                             break;
                     }

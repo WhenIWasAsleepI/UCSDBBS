@@ -1,5 +1,8 @@
 package com.ucsdbbs.ucsdbbs;
 import android.support.v4.app.Fragment;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 /**
  * Created by Administrator on 2015/12/26.
  */

@@ -9,13 +9,34 @@ import android.view.WindowManager;
 public class Global extends Application{
     private static Context mContext;
     private boolean login;
+    private String uid;
+    private String password;
+    private String username;
+
     public boolean getloginstatus(){
         return login;
+    }
+    public String getuid(){
+        return uid;
+    }
+    public String getpassword(){
+        return password;
+    }
+    public String getusername(){
+        return username;
     }
     public void setloginstatus(boolean s){
         this.login = s;
     }
-
+    public void setuid(String s){
+        this.uid = s;
+    }
+    public void setpassword(String s){
+        this.password = s;
+    }
+    public void setusername(String s){
+        this.username = s;
+    }
     private WindowManager.LayoutParams windowParams = new WindowManager.LayoutParams();
     public WindowManager.LayoutParams getWindowParams() {
         return windowParams;

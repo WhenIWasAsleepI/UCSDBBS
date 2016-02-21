@@ -6,9 +6,11 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -30,7 +32,8 @@ public class ForumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
-
+        TextView TOPIC=(TextView)findViewById(R.id.TOPIC);
+        TOPIC.setText("浏览讨论区");
         getData();
 
 
@@ -43,7 +46,9 @@ public class ForumActivity extends AppCompatActivity {
                                 long id) {
             Intent intent = new Intent();
             intent.setClass(ForumActivity.this, ThreadActivity.class);
-            intent.putExtra("fid",(String)mCustomBaseAdapter.getFid(position));
+            intent.putExtra("fid", (String) mCustomBaseAdapter.getFid(position));
+            intent.putExtra("name",(String)mCustomBaseAdapter.getItem(position));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
           //  Toast.makeText(getBaseContext(), (String) mCustomBaseAdapter.getFid(position),
           //          Toast.LENGTH_SHORT).show();
@@ -113,4 +118,16 @@ public class ForumActivity extends AppCompatActivity {
             }
         }
     };
+
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+ if(keyCode == KeyEvent.KEYCODE_BACK){
+                 finish();
+     overridePendingTransition(0, 0);
+                   return true;
+  }else {
+   return super.onKeyDown(keyCode, event);
+  }
+
+    }
 }

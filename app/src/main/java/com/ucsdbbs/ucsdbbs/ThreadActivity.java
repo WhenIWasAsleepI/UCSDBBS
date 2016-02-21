@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -32,6 +34,7 @@ public class ThreadActivity extends AppCompatActivity{
     private ThreadAdapter mCustomBaseAdapter;
     private ServerRunnable runnable;
     private String fid;
+    private String name;
     //next previous buttons
     private WindowManager windowManager = null;
     private WindowManager.LayoutParams windowManagerParams = null;
@@ -45,6 +48,11 @@ public class ThreadActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thread);
+        TextView TOPIC=(TextView)findViewById(R.id.TOPIC);
+        Intent intent =getIntent();
+        name=intent.getStringExtra("name");
+        TOPIC.setText(name);
+
         page=1;
         getData();
         createNextButton();
@@ -215,4 +223,15 @@ public class ThreadActivity extends AppCompatActivity{
         }
     }
 
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            finish();
+            overridePendingTransition(0, 0);
+            return true;
+        }else {
+            return super.onKeyDown(keyCode, event);
+        }
+
+    }
 }

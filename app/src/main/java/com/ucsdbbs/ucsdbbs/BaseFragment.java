@@ -175,6 +175,9 @@ public abstract class BaseFragment extends Fragment {
                     JSONArray jArray = new JSONArray(data.getString("data"));
                     JSONObject json_data = jArray.getJSONObject(0);
                     salt=json_data.getString("salt");
+                    Application application = (Application)Global.getContext();
+                    global = (Global)application;
+                    global.setuid(json_data.getString("uid"));
                     MD5 password_md5=null;
                     String temp="";
                     try {

@@ -62,12 +62,12 @@ public class MainActivity extends FragmentActivity {
                     radioGroup.check(R.id.personalradio);
                     replace(new PersonalFragment());
                 } else {
-                    //SelectForumDialog dialog = new SelectForumDialog();
-                    //dialog.show(fragmentManager, "dialog");
-                    Intent intent = new Intent();
+                    SelectForumDialog dialog = new SelectForumDialog();
+                    dialog.show(fragmentManager, "dialog");
+                    /*Intent intent = new Intent();
                     intent.setClass(getBaseContext(), NewthreadActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
+                    startActivity(intent);*/
                 }
             }
         });

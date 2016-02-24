@@ -1,7 +1,10 @@
 package com.ucsdbbs.ucsdbbs;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,18 +25,25 @@ import java.util.Map;
 
 public class NewthreadActivity extends AppCompatActivity {
     private Global global;
+    private Integer fid;
+    private ServerRunnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_newthread);
         TextView topic=(TextView)findViewById(R.id.TOPIC);
         topic.setText("发布新帖");
+
+        Intent intent =getIntent();
+        fid=intent.getIntExtra("fid",0);
 
         final EditText title=(EditText)findViewById(R.id.title);
         final EditText content=(EditText)findViewById(R.id.content);
 
         Application application = (Application)Global.getContext();
         global = (Global)application;
+
         Button post=(Button)findViewById(R.id.post);
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +62,20 @@ public class NewthreadActivity extends AppCompatActivity {
                     map.put("topic",title_s);
                     map.put("content",content_s);
                     map.put("typeid","0");
+                    map.put("fid",String.valueOf(fid));
+                    map.put("uid", global.getuid());
+                    //Log.e("post param:",username+password+title_s+content_s+String.valueOf(fid));
+                    runnable = new ServerRunnable("http://www.ucsdbbs.com/app_related/newthread.php", map, post_handler);
+                    new Thread(runnable).start();
                 }
+            }
+        });
+
+        Button discard=(Button)findViewById(R.id.discard);
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -62,27 +85,27 @@ public class NewthreadActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         return imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
     }
-    /*@Override
-    public boolean onTouchEvent(MotionEvent event) {
-        final InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        //if(imm.isActive())return imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
-        //else return true;
-        //return true;
-        //final View activityRootView = getWindow().getDecorView().getRootView();
-        final View haha=(View)findViewById(R.id.newthread_root);
-        final View view = this.getCurrentFocus();
-        haha.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = haha.getRootView().getHeight() - haha.getHeight();
-                Log.e("hehhee", "height is" + String.valueOf(heightDiff));
-                if (heightDiff > 100) { // if more than 100 pixels, its probably a keyboard...
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    public Handler post_handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle data = msg.getData();
+            String val = data.getString("result");
+            if (val.equals("success")){
+                if(data.getString("data").equals("ok")){
+                    Toast.makeText(getBaseContext(), "发帖成功！", Toast.LENGTH_SHORT)
+                            .show();
+                    finish();
+                }
+                else{
+                    Toast.makeText(getBaseContext(), "对不起，您没有发帖权限，或已被禁言，请联系管理员：dnyjy1989@gmail.com", Toast.LENGTH_SHORT)
+                            .show();
                 }
             }
-        });
+            else{
 
-        return super.onTouchEvent(event);
-    }*/
+            }
+        }
+    };
 
 }

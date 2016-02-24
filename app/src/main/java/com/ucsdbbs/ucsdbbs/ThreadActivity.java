@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -142,10 +143,10 @@ public class ThreadActivity extends AppCompatActivity{
         Next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                page+=1;
+                page += 1;
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("fid",fid);
-                map.put("page",Integer.toString(page));
+                map.put("fid", fid);
+                map.put("page", Integer.toString(page));
                 map.put("step", "15");
                 runnable = new ServerRunnable("http://www.ucsdbbs.com/app_related/getthread.php", map, fill_handler);
                 new Thread(runnable).start();
@@ -155,7 +156,8 @@ public class ThreadActivity extends AppCompatActivity{
         Next.setImageResource(R.drawable.pm);
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         windowManagerParams = ((Global) getApplication()).getWindowParams();
-        windowManagerParams.type =  WindowManager.LayoutParams.TYPE_TOAST;
+        if(Build.VERSION.SDK_INT>=19)windowManagerParams.type =  WindowManager.LayoutParams.TYPE_TOAST;
+        else windowManagerParams.type =  WindowManager.LayoutParams.TYPE_PHONE;
         windowManagerParams.format = PixelFormat.RGBA_8888;
         windowManagerParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
@@ -174,7 +176,7 @@ public class ThreadActivity extends AppCompatActivity{
         Prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(page>1) {
+                if (page > 1) {
                     page -= 1;
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("fid", fid);
@@ -182,10 +184,9 @@ public class ThreadActivity extends AppCompatActivity{
                     map.put("step", "15");
                     runnable = new ServerRunnable("http://www.ucsdbbs.com/app_related/getthread.php", map, fill_handler);
                     new Thread(runnable).start();
-                }
-                else {
+                } else {
                     windowManager.removeView(Prev);
-                    Prev=null;
+                    Prev = null;
                     Toast.makeText(getBaseContext(), "已经到第一页啦！", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -193,7 +194,8 @@ public class ThreadActivity extends AppCompatActivity{
         Prev.setImageResource(R.drawable.pm);
         windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         windowManagerParams = ((Global) getApplication()).getWindowParams();
-        windowManagerParams.type =  WindowManager.LayoutParams.TYPE_TOAST;
+        if(Build.VERSION.SDK_INT>=19)windowManagerParams.type =  WindowManager.LayoutParams.TYPE_TOAST;
+        else windowManagerParams.type =  WindowManager.LayoutParams.TYPE_PHONE;
         windowManagerParams.format = PixelFormat.RGBA_8888;
         windowManagerParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;

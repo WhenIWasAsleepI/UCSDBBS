@@ -57,6 +57,7 @@ public class ServerRunnable implements Runnable{
                 Map.Entry<String, String> entry = iterator.next();
                 postContent+=URLEncoder.encode(entry.getKey(), "UTF-8") +"="+entry.getValue()+"&";
             }
+            //Log.e("log_tag", postContent);
             dos.write(postContent.getBytes());
             dos.flush();
             dos.close();
@@ -83,6 +84,7 @@ public class ServerRunnable implements Runnable{
             } else {
                 content = new String(data);
             }
+
             Message msg = new Message();
             Bundle data1 = new Bundle();
             data1.putString("result", "success");
